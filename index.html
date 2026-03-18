@@ -293,7 +293,7 @@
     </section>
 </div>
 
-<div id="changelog" class="tab-pane" style="display: none;">
+ <div id="changelog" class="tab-pane" style="display: none;">
     <div class="header" style="background: white; padding: 30px; border-bottom: 1px solid #eee;">
         <h1 style="margin: 0; color: #2c3e50;">📝 更新日誌</h1>
         <p style="color: #7f8c8d; margin-top: 10px;">記錄專案管理系統的每一次改進</p>
@@ -315,7 +315,7 @@
     <div id="member3" class="content-pane">
     <header><h1>王珮瑜 個人進度文件</h1></header>
     <a href="https://docs.google.com/document/d/111P8XxLG7azWbdrEktJ6v-toPUu6sJBjENQDmmMdgNY/edit?usp=sharing" target="_blank" class="link-btn">在新分頁開啟完整文件</a>
-    <section>
+    <section><div id="changelog" class="tab-pane"
         <div class="doc-wrapper">
             <iframe src="https://docs.google.com/document/d/e/2PACX-1vT7J_dLv2hSGEbnns08ZaVJtbcNP6XZHByPIONy1Xsdr2SoevKaVlc3N2BzIZWYXY5j1unWw8tuI4uA/pub?embedded=true"></iframe>
         </div>
@@ -330,20 +330,42 @@
     </div>
 
 
-    <script>
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
-        function openPane(evt, paneName) {
-            var i, panes, links;
-            panes = document.getElementsByClassName("content-pane");
-            for (i = 0; i < panes.length; i++) { panes[i].style.display = "none"; }
-            links = document.getElementsByClassName("tab-btn");
-            for (i = 0; i < links.length; i++) { links[i].classList.remove("active"); }
-            document.getElementById(paneName).style.display = "block";
-            evt.currentTarget.classList.add("active");
-            if (window.innerWidth <= 768) { toggleSidebar(); }
-            document.querySelector('.main-content').scrollTop = 0;
+   <script>
+    function toggleSidebar() { 
+        document.getElementById('sidebar').classList.toggle('active'); 
+    }
+
+    function openPane(evt, paneName) {
+        var i, panes, links;
+        
+        // 修正處：同時抓取 "content-pane" 和 "tab-pane" (或是統一改用 tab-pane)
+        // 為了保險，我們直接用 querySelectorAll 抓取所有面板
+        panes = document.querySelectorAll(".content-pane, .tab-pane");
+        
+        for (i = 0; i < panes.length; i++) { 
+            panes[i].style.display = "none"; 
         }
-    </script>
+
+        links = document.getElementsByClassName("tab-btn");
+        for (i = 0; i < links.length; i++) { 
+            links[i].classList.remove("active"); 
+        }
+
+        // 顯示點選的面板
+        var targetPane = document.getElementById(paneName);
+        if (targetPane) {
+            targetPane.style.display = "block";
+        }
+
+        evt.currentTarget.classList.add("active");
+
+        if (window.innerWidth <= 768) { 
+            toggleSidebar(); 
+        }
+        
+        document.querySelector('.main-content').scrollTop = 0;
+    }
+</script>
 </body>
 </html>
 
