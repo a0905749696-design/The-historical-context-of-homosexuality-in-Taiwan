@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>畢業專案管理系統 - 跨裝置優化版</title>
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --primary-color: #3498db;
+            --dark-bg: #2c3e50;
+            --light-bg: #f0f2f5;
+            /* 字體大小變數 */
+            --h1-size: 2em;
+            --h2-size: 1.5em;
+            --body-size: 16px;
+        }
+
+
+        body { 
+            font-family: "Microsoft JhengHei", "Heiti TC", sans-serif; 
+            margin: 0; display: flex; 
+            background-color: var(--light-bg);
+            height: 100vh; overflow: hidden;
+            font-size: var(--body-size);
+            color: #333;
+        }
+
+
+        /* --- 手機選單按鈕 --- */
+        .menu-toggle {
+            display: none;
+            position: fixed; top: 15px; left: 15px;
+            background: var(--primary-color); color: white;
+            border: none; padding: 10px 18px; border-radius: 8px;
+            z-index: 1001; cursor: pointer; font-size: 16px;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+
+        /* --- 左側導覽 --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--dark-bg);
+            color: white; display: flex; flex-direction: column;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            z-index: 1000; flex-shrink: 0; transition: transform 0.3s ease;
+            height: 100vh;
+        }
+        .sidebar-content { flex: 1; overflow-y: auto; padding-bottom: 30px; }
+        .sidebar h2 { font-size: 1.4em; text-align: center; padding: 25px 0; margin: 0; background: rgba(0,0,0,0.1); color: white;}
+        
+        .tab-btn {
+            width: 100%; background: none; border: none; color: #aab2bd; padding: 15px 25px;
+            text-align: left; cursor: pointer; font-size: 16px; transition: 0.3s;
+            border-left: 5px solid transparent; display: block;
+        }
+        .tab-btn:hover { background-color: #3e4f5f; color: white; }
+        .tab-btn.active { background-color: #3e4f5f; color: white; border-left: 5px solid var(--primary-color); font-weight: bold; }
+
+
+        /* --- 右側內容主區 --- */
+        .main-content { flex: 1; overflow-y: auto; padding: 40px; box-sizing: border-box; scroll-behavior: smooth; }
+        header h1 { font-size: var(--h1-size); margin-bottom: 25px; }
+        section { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 25px; box-sizing: border-box; }
+        h2 { color: #2c3e50; margin-top: 0; font-size: var(--h2-size); border-bottom: 2px solid #f1f1f1; padding-bottom: 12px; margin-bottom: 18px; }
+
+
+        /* 卡片設計 */
+        .card-inner { padding: 18px; border-radius: 12px; line-height: 1.7; font-size: 1em; }
+        .info-box { background: #ebf8ff; border-left: 6px solid #63b3ed; }
+        .progress-box { background: #f0fff4; border-left: 6px solid #68d391; }
+        .content-box { background: #fffdf0; border-left: 6px solid #f6e05e; }
+        .feedback-box { background: #faf5ff; border-left: 6px solid #b794f4; }
+        .notice-board { background: #fff5f5; border-left: 8px solid #fc8181; padding: 20px; border-radius: 15px; margin-bottom: 30px; }
+
+
+        /* 網格佈局 */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; }
+        .full-width { grid-column: span 2; }
+
+
+        /* 外連按鈕設計 */
+        .link-btn {
+            display: inline-flex; align-items: center;
+            background: var(--primary-color); color: white;
+            text-decoration: none; padding: 10px 18px;
+            border-radius: 8px; margin-bottom: 15px; font-weight: bold;
+            transition: 0.3s; font-size: 0.9em;
+        }
+        .link-btn:hover { background: #2980b9; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .link-btn::before { content: '🔗'; margin-right: 8px; }
+
+
+        /* 文件容器 */
+        .doc-wrapper { width: 100%; height: 80vh; border-radius: 15px; overflow: hidden; border: 1px solid #e2e8f7; background: #fff; }
+        .calendar-wrapper { width: 100%; height: 600px; border-radius: 15px; overflow: hidden; border: 1px solid #e2e8f7; }
+        iframe { width: 100%; height: 100%; border: none; }
+
+
+        .content-pane { display: none; animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+
+        /* --- 手機版 (RWD) 核心優化 --- */
+        @media (max-width: 768px) {
+            :root {
+                --h1-size: 1.5em; /* 手機標題縮小 */
+                --h2-size: 1.2em;
+                --body-size: 14px; /* 手機內文縮小 */
+            }
+            .menu-toggle { display: block; } 
+            .sidebar { position: fixed; transform: translateX(-100%); }
+            .sidebar.active { transform: translateX(0); }
+            
+            .main-content { padding: 80px 15px 20px 15px; } 
+            section { padding: 20px; border-radius: 15px; width: 100%; margin-left: 0; margin-right: 0; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .full-width { grid-column: span 1; }
+            
+            .doc-wrapper { height: 70vh; }
+            .calendar-wrapper { height: 400px; }
+            
+            .tab-btn { padding: 18px 25px; font-size: 17px; } /* 手機選單按鈕大一點好按 */
+        }
+    </style>
+</head>
+<body>
+
+
+    <button class="menu-toggle" onclick="toggleSidebar()">☰ 選單</button>
+
+
+    <div class="sidebar" id="sidebar">
+        <h2>🌈 專案管理</h2>
+        <div class="sidebar-content">
+            <button class="tab-btn active" onclick="openPane(event, 'dashboard')">🏠 總覽儀表板</button>
+            <button class="tab-btn" onclick="openPane(event, 'last-semester')">📚 上學期進度</button>
+            <hr style="width: 80%; border: 0.5px solid #444; margin: 20px auto; opacity: 0.2;">
+            <p style="padding-left: 25px; font-size: 12px; color: #7f8c8d; font-weight: bold; text-transform: uppercase;">個人進度文件</p>
+            <button class="tab-btn" onclick="openPane(event, 'member1')">👤 王鈺淇</button>
+            <button class="tab-btn" onclick="openPane(event, 'member2')">👤 徐翊嫙</button>
+            <button class="tab-btn" onclick="openPane(event, 'member3')">👤 王珮瑜</button>
+            <button class="tab-btn" onclick="openPane(event, 'member4')">👤 游凱蓁</button>
+            <button class="tab-btn" onclick="openPane(event, 'member5')">👤 杜培德</button>
+            <button class="tab-btn" onclick="openPane(event, 'member6')">👤 黃竣軒</button>
+            <button class="tab-btn" onclick="openPane(event, 'member7')">👤 葉心澄</button>
+        </div>
+    </div>
+
+
+    <div class="main-content">
+        <div id="dashboard" class="content-pane" style="display: block;">
+            <header><h1>專案概覽儀表板</h1></header>
+            <div class="notice-board">
+                <h3>🔔 置頂公告</h3>
+                <p>📌 6/16 需進行口頭報告，請各組員注意更新。</p>
+            </div>
+            
+            <div class="dashboard-grid">
+                <section class="full-width">
+                    <h2>🎯 研究目標與方式</h2>
+                    <div class="card-inner info-box">
+                        <strong>目標：</strong> 分析台灣同婚脈絡下的社會影響與法規變遷。<br>
+                        <strong>方式：</strong> 文獻回顧、深度訪談、問卷調查。
+                    </div>
+                </section>
+
+
+                <section>
+                    <h2>📈 論文進度</h2>
+                    <div class="card-inner progress-box">書籍閱讀與文獻蒐集：<strong>10%</strong></div>
+                </section>
+
+
+                <section>
+                    <h2>📖 上課內容</h2>
+                    <div class="card-inner content-box">
+                        📅 03/02 課程說明<br>
+                        📅 03/09 論文題目修改討論和組員變動
+                        📅 03/17 永續環境
+                    </div>
+                </section>
+
+
+                <section class="full-width">
+                    <h2>💬 指導意見 / 組員回饋</h2>
+                    <div class="card-inner feedback-box">
+                        <strong>教授：</strong> 暫無。<br>
+                        <strong>組員：</strong> 暫無。
+                    </div>
+                </section>
+                <section class="full-width">
+    <h2>👥 組員工作分配與內容</h2>
+    <div class="card-inner feedback-box">
+        <ul class="allocation-list">
+            <li>
+                <span class="member-name">👤 王鈺淇</span>
+                <span class="work-content">內容待定</span>
+                <span class="status-tag">待確認</span>
+            </li>
+            <li>
+                <span class="member-name">👤 徐翊嫙</span>
+                <span class="work-content">內容待定</span>
+                <span class="status-tag">待確認</span>
+            </li>
+            <li>
+                <span class="member-name">👤 王珮瑜</span>
+                <span class="work-content">內容待定</span>
+                <span class="status-tag">待確認</span>
+            </li>
+            <li>
+                <span class="member-name">👤 游凱蓁</span>
+                <span class="work-content">內容待定</span>
+                <span class="status-tag">待確認</span>
+            </li>
+            <li>
+                <span class="member-name">👤 杜培德</span>
+                <span class="work-content">內容待定</span>
+                <span class="status-tag">待確認</span>
+            </li>
+            <li>
+                <span class="member-name">👤 黃竣軒</span>
+                <span class="work-content">內容待定</span>
+                <span class="status-tag">待確認</span>
+            </li>
+            <li>
+                <span class="member-name">👤 葉心澄</span>
+                <span class="work-content">內容待定</span>
+                <span class="status-tag">待確認</span>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<style>
+    /* 針對此表單的專屬 RWD 樣式 */
+    .allocation-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .allocation-list li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 15px;
+        border-bottom: 1px dashed #ddd;
+        gap: 10px;
+    }
+    .allocation-list li:last-child { border-bottom: none; }
+
+    .member-name { font-weight: bold; flex: 0 0 80px; }
+    .work-content { flex: 1; color: #666; font-size: var(--content-text-size); }
+    .status-tag { 
+        font-size: 0.8em; 
+        background: #eee; 
+        padding: 2px 8px; 
+        border-radius: 4px; 
+        white-space: nowrap; 
+    }
+
+    /* 手機版微調：如果名稱跟內容太擠，自動換行 */
+    @media (max-width: 480px) {
+        .allocation-list li {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+        }
+        .status-tag { align-self: flex-end; }
+    }
+</style>
+
+
+                <section class="full-width">
+                    <h2>📅 團隊里程碑</h2>
+                    <div class="calendar-wrapper">
+                        <iframe src="https://calendar.google.com/calendar/embed?src=4ee239d9e6578a8a4d861574ea41fb225f525890b53309e0dfd09228f941778a%40group.calendar.google.com&ctz=Asia%2FTaipei"></iframe>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+
+        <div id="member3" class="content-pane">
+    <header><h1>王珮瑜 個人進度文件</h1></header>
+    <a href="https://docs.google.com/document/d/111P8XxLG7azWbdrEktJ6v-toPUu6sJBjENQDmmMdgNY/edit?usp=sharing" target="_blank" class="link-btn">在新分頁開啟完整文件</a>
+    <section>
+        <div class="doc-wrapper">
+            <iframe src="https://docs.google.com/document/d/e/2PACX-1vT7J_dLv2hSGEbnns08ZaVJtbcNP6XZHByPIONy1Xsdr2SoevKaVlc3N2BzIZWYXY5j1unWw8tuI4uA/pub?embedded=true"></iframe>
+        </div>
+    </section>
+</div>
+
+
+        <div id="last-semester" class="content-pane">
+    <header><h1>📚 上學期進度總匯</h1></header>
+    <a href="https://docs.google.com/document/d/1CQXg4afJhZ7BEONz-cAMcBBgKNKND25Z-QohH7bGJ8c/edit?usp=sharing" target="_blank" class="link-btn">開啟原始文件</a>
+    <section>
+        <div class="doc-wrapper">
+            <iframe src="https://docs.google.com/document/d/e/2PACX-1vTU63vz64uXYSS0y-32p8tFtSYKZ8ZHuAR_AqLPWTPGzx9svIEpz3Dk3X4rjKUm13OIDte9V0HdDVRr/pub?embedded=true"></iframe>
+        </div>
+    </section>
+</div>
+
+
+        <div id="member1" class="content-pane"><header><h1>王鈺淇 個人進度文件</h1></header><section><div class="doc-wrapper"><iframe></iframe></div></section></div>
+        <div id="member2" class="content-pane"><header><h1>徐翊嫙 個人進度文件</h1></header><section><div class="doc-wrapper"><iframe></iframe></div></section></div>
+        <div id="member4" class="content-pane"><header><h1>游凱蓁 個人進度文件</h1></header><section><div class="doc-wrapper"><iframe></iframe></div></section></div>
+        <div id="member5" class="content-pane"><header><h1>杜培德 個人進度文件</h1></header><section><div class="doc-wrapper"><iframe></iframe></div></section></div>
+        <div id="member6" class="content-pane"><header><h1>黃竣軒 個人進度文件</h1></header><section><div class="doc-wrapper"><iframe></iframe></div></section></div>
+        <div id="member7" class="content-pane"><header><h1>葉心澄 個人進度文件</h1></header><section><div class="doc-wrapper"><iframe></iframe></div></section></div>
+    </div>
+
+
+    <script>
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
+        function openPane(evt, paneName) {
+            var i, panes, links;
+            panes = document.getElementsByClassName("content-pane");
+            for (i = 0; i < panes.length; i++) { panes[i].style.display = "none"; }
+            links = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < links.length; i++) { links[i].classList.remove("active"); }
+            document.getElementById(paneName).style.display = "block";
+            evt.currentTarget.classList.add("active");
+            if (window.innerWidth <= 768) { toggleSidebar(); }
+            document.querySelector('.main-content').scrollTop = 0;
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
