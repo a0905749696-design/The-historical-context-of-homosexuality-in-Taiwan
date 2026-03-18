@@ -136,6 +136,7 @@
         <div class="sidebar-content">
             <button class="tab-btn active" onclick="openPane(event, 'dashboard')">🏠 總覽儀表板</button>
             <button class="tab-btn" onclick="openPane(event, 'last-semester')">📚 上學期進度</button>
+            <button class="tab-btn" onclick="openPane(event, 'changelog')">📝 更新日誌</button>
             <hr style="width: 80%; border: 0.5px solid #444; margin: 20px auto; opacity: 0.2;">
             <p style="padding-left: 25px; font-size: 12px; color: #7f8c8d; font-weight: bold; text-transform: uppercase;">個人進度文件</p>
             <button class="tab-btn" onclick="openPane(event, 'member1')">👤 王鈺淇</button>
@@ -282,18 +283,6 @@
             </div>
         </div>
 
-
-        <div id="member3" class="content-pane">
-    <header><h1>王珮瑜 個人進度文件</h1></header>
-    <a href="https://docs.google.com/document/d/111P8XxLG7azWbdrEktJ6v-toPUu6sJBjENQDmmMdgNY/edit?usp=sharing" target="_blank" class="link-btn">在新分頁開啟完整文件</a>
-    <section>
-        <div class="doc-wrapper">
-            <iframe src="https://docs.google.com/document/d/e/2PACX-1vT7J_dLv2hSGEbnns08ZaVJtbcNP6XZHByPIONy1Xsdr2SoevKaVlc3N2BzIZWYXY5j1unWw8tuI4uA/pub?embedded=true"></iframe>
-        </div>
-    </section>
-</div>
-
-
         <div id="last-semester" class="content-pane">
     <header><h1>📚 上學期進度總匯</h1></header>
     <a href="https://docs.google.com/document/d/1CQXg4afJhZ7BEONz-cAMcBBgKNKND25Z-QohH7bGJ8c/edit?usp=sharing" target="_blank" class="link-btn">開啟原始文件</a>
@@ -304,7 +293,34 @@
     </section>
 </div>
 
-
+<div id="changelog" class="tab-pane" style="display: none;">
+    <div class="header" style="background: white; padding: 30px; border-bottom: 1px solid #eee;">
+        <h1 style="margin: 0; color: #2c3e50;">📝 更新日誌</h1>
+        <p style="color: #7f8c8d; margin-top: 10px;">記錄專案管理系統的每一次改進</p>
+    </div>
+    <div class="content-card" style="margin: 20px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+        <ul style="list-style: none; padding: 0;">
+            <li style="margin-bottom: 25px; border-left: 4px solid #3498db; padding-left: 20px;">
+                <strong style="display: block; font-size: 1.1em; color: #2c3e50;">2026-03-18</strong>
+                <p style="margin: 5px 0; color: #34495e;">✅ 成功串接 GitHub Desktop 與 Vercel 自動化部署環境。</p>
+                <p style="margin: 5px 0; color: #34495e;">✅ 調整側邊欄標題顏色並優化版面順序。</p>
+            </li>
+            <li style="margin-bottom: 25px; border-left: 4px solid #ecf0f1; padding-left: 20px;">
+                <strong style="display: block; font-size: 1.1em; color: #95a5a6;">2026-03-15</strong>
+                <p style="margin: 5px 0; color: #7f8c8d;">🔧 完成基本 HTML 框架與七人分工介面設計。</p>
+            </li>
+        </ul>
+    </div>
+</div>
+    <div id="member3" class="content-pane">
+    <header><h1>王珮瑜 個人進度文件</h1></header>
+    <a href="https://docs.google.com/document/d/111P8XxLG7azWbdrEktJ6v-toPUu6sJBjENQDmmMdgNY/edit?usp=sharing" target="_blank" class="link-btn">在新分頁開啟完整文件</a>
+    <section>
+        <div class="doc-wrapper">
+            <iframe src="https://docs.google.com/document/d/e/2PACX-1vT7J_dLv2hSGEbnns08ZaVJtbcNP6XZHByPIONy1Xsdr2SoevKaVlc3N2BzIZWYXY5j1unWw8tuI4uA/pub?embedded=true"></iframe>
+        </div>
+    </section>
+</div>
         <div id="member1" class="content-pane"><header><h1>王鈺淇 個人進度文件</h1></header><section><div class="doc-wrapper"><iframe></iframe></div></section></div>
         <div id="member2" class="content-pane"><header><h1>徐翊嫙 個人進度文件</h1></header><section><div class="doc-wrapper"><iframe></iframe></div></section></div>
         <div id="member4" class="content-pane"><header><h1>游凱蓁 個人進度文件</h1></header><section><div class="doc-wrapper"><iframe></iframe></div></section></div>
